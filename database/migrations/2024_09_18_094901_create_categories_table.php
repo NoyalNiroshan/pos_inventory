@@ -1,22 +1,19 @@
 <?php
 
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBrandsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('brands', function (Blueprint $table) {
-            $table->string('id', 10)->primary(); // Custom string-based ID
-            $table->string('name', 255);
+        Schema::create('categories', function (Blueprint $table) {
+            $table->string('id')->primary(); // Custom ID like 'ca001'
+            $table->string('name')->unique();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->boolean('is_active')->default(true);
@@ -26,12 +23,9 @@ class CreateBrandsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('brands');
+        Schema::dropIfExists('categories');
     }
-}
-
+};

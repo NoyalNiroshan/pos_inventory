@@ -26,19 +26,19 @@
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{route('categories.index')}}">
                             <i data-feather="layers"></i>
                             <span data-key="t-categories">Categories</span>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{route('subcategories.index')}}">
                             <i data-feather="list"></i>
                             <span data-key="t-subcategories">Subcategories</span>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{route('products.index')}}">
                             <i data-feather="package"></i>
                             <span data-key="t-products">Products</span>
                         </a>

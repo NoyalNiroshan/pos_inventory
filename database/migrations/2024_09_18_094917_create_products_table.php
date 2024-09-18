@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('subcategory_id')->references('id')->on('subcategories')->onDelete('cascade');
             $table->string('name');
             $table->enum('stock_type', ['liquid', 'solid', 'dress']); // Stock type enum
-            $table->string('serial_number')->unique();
+            $table->string('serial_number')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('in_stock')->default(true);
             $table->boolean('on_sale')->default(false);

@@ -6,15 +6,15 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>Create Permission
-                        <a href="{{ url('permissions') }}" class="btn btn-danger float-end">Back</a>
+                    <h4>Create Role
+                        <a href="{{ url('roles') }}" class="btn btn-danger float-end">Back</a>
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ url('permissions') }}" method="POST">
+                    <form action="{{ url('roles') }}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label for="name">Permission Name</label>
+                            <label for="name">Role Name</label>
                             <input type="text" name="name" class="form-control" />
                         </div>
                         <div class="mb-3">

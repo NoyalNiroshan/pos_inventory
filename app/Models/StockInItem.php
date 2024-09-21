@@ -8,7 +8,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StockInItem extends Model
 {
     use HasFactory;
-    protected $fillable = ['id', 'stock_in_id', 'product_id', 'quantity', 'unit', 'price_per_unit', 'expiration_date', 'discount', 'manufacturing_date'];
+
+    protected $table = 'stock_in_items';
+
+    protected $fillable = [
+        'stock_in_id', 'product_id', 'quantity', 'unit', 'price_per_unit',
+        'discount', 'discount_type', 'total_price', 'expiration_date', 'manufacturing_date'
+    ];
+
+    protected $casts = [
+        'stock_in_date' => 'date',
+        'expiration_date' => 'date',
+        'manufacturing_date' => 'date',
+    ];
 
     public $incrementing = false;
 
@@ -17,16 +29,9 @@ class StockInItem extends Model
         parent::boot();
 
         static::creating(function ($stockInItem) {
-            if (empty($stockInItem->id)) {
-                $latestStockInItem = StockInItem::orderBy('id', 'desc')->first();
-                if ($latestStockInItem) {
-                    $numericPart = (int) substr($latestStockInItem->id, 3);
-                    $newId = 'sti' . str_pad($numericPart + 1, 3, '0', STR_PAD_LEFT);
-                } else {
-                    $newId = 'sti001';
-                }
-                $stockInItem->id = $newId;
-            }
+            $latestStockInItem = StockInItem::orderBy('id', 'desc')->first();
+            $numericPart = $latestStockInItem ? (int) substr($latestStockInItem->id, 3) : 0;
+            $stockInItem->id = 'sti' . str_pad($numericPart + 1, 3, '0', STR_PAD_LEFT);
         });
     }
 

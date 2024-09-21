@@ -15,8 +15,7 @@ return new class extends Migration
             $table->string('id')->primary(); // Custom ID like 'ssp001'
             $table->string('stock_in_id'); // Foreign key to stock_in
             $table->foreign('stock_in_id')->references('id')->on('stock_in')->onDelete('cascade');
-            $table->string('supplier_id'); // Foreign key to suppliers
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+           
             $table->decimal('amount_paid', 10, 2); // Amount paid to supplier
             $table->decimal('balance_due', 10, 2)->nullable(); // Balance left to be paid
             $table->enum('payment_method', ['card', 'cash', 'bank', 'others']); // Payment method

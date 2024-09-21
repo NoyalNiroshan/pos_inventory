@@ -50,8 +50,8 @@
 
     <!-- Categories Table -->
     <div class="table-responsive">
-        <table class="table table-bordered table-hover text-center align-middle">
-            <thead class="custom-table-header">
+        <table class="table table-striped table-bordered table-hover text-center align-middle">
+            <thead class="custom-table-header bg-primary text-white">
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
@@ -75,15 +75,23 @@
                             @endif
                         </td>
                         <td>
-                            <input type="checkbox" class="form-check-input" id="edit-toggle-{{ $category->id }}" {{ $category->is_active ? 'checked' : '' }} disabled>
+                            <span class="badge {{ $category->is_active ? 'bg-success' : 'bg-danger' }}">
+                                {{ $category->is_active ? 'Yes' : 'No' }}
+                            </span>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewCategoryModal" onclick="viewCategoryData({{ json_encode($category) }})">View</button>
-                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editCategoryModal" onclick="loadCategoryData({{ json_encode($category) }})">Edit</button>
+                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewCategoryModal" onclick="viewCategoryData({{ json_encode($category) }})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editCategoryModal" onclick="loadCategoryData({{ json_encode($category) }})">
+                                <i class="fas fa-edit"></i>
+                            </button>
                             <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -94,30 +102,27 @@
 
     <!-- Create Category Modal -->
     <div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data" id="createCategoryForm">
+                <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data" id="createCategoryForm" novalidate>
                     @csrf
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="createCategoryModalLabel">Add New Category</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="create-name" class="form-label">Category Name</label>
-                            <input type="text" class="form-control" id="create-name" name="name" required>
+                            <label for="create-name" class="form-label">Category Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control border border-dark" id="create-name" name="name" required>
                         </div>
-
                         <div class="mb-3">
                             <label for="create-description" class="form-label">Description</label>
-                            <textarea class="form-control" id="create-description" name="description"></textarea>
+                            <textarea class="form-control border border-dark" id="create-description" name="description"></textarea>
                         </div>
-
                         <div class="mb-3">
                             <label for="create-image" class="form-label">Category Image</label>
-                            <input type="file" class="form-control" id="create-image" name="image">
+                            <input type="file" class="form-control border border-dark" id="create-image" name="image">
                         </div>
-
                         <div class="mb-3 form-check form-switch">
                             <input type="hidden" name="is_active" value="0">
                             <input class="form-check-input" type="checkbox" id="create-is_active" name="is_active" value="1">
@@ -135,39 +140,35 @@
 
     <!-- Edit Category Modal -->
     <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <form action="" method="POST" enctype="multipart/form-data" id="editCategoryForm">
+                <form action="" method="POST" enctype="multipart/form-data" id="editCategoryForm" novalidate>
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="id" id="edit-category-id">
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="edit-name" class="form-label">Category Name</label>
-                            <input type="text" class="form-control" id="edit-name" name="name" required>
+                            <label for="edit-name" class="form-label">Category Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control border border-dark" id="edit-name" name="name" required>
                         </div>
-
                         <div class="mb-3">
                             <label for="edit-description" class="form-label">Description</label>
-                            <textarea class="form-control" id="edit-description" name="description"></textarea>
+                            <textarea class="form-control border border-dark" id="edit-description" name="description"></textarea>
                         </div>
-
                         <div class="mb-3" id="edit-image-section">
                             <label for="edit-image" class="form-label">Current Image</label>
                             <div>
                                 <img id="edit-current-image" src="" alt="Category Image" width="100" class="rounded">
                             </div>
                         </div>
-
                         <div class="mb-3">
                             <label for="edit-image" class="form-label">Change Category Image</label>
-                            <input type="file" class="form-control" id="edit-image" name="image">
+                            <input type="file" class="form-control border border-dark" id="edit-image" name="image">
                         </div>
-
                         <div class="mb-3 form-check form-switch">
                             <input type="hidden" name="is_active" value="0">
                             <input class="form-check-input" type="checkbox" id="edit-is_active" name="is_active" value="1">
@@ -176,7 +177,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-warning">Save changes</button>
                     </div>
                 </form>
             </div>
@@ -185,11 +186,11 @@
 
     <!-- View Category Modal -->
     <div class="modal fade" id="viewCategoryModal" tabindex="-1" aria-labelledby="viewCategoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="viewCategoryModalLabel">View Category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -226,18 +227,14 @@
 <script>
     // Toast initialization on page load
     window.onload = function() {
-        if (document.getElementById('successToast')) {
-            let successToast = new bootstrap.Toast(document.getElementById('successToast'));
-            successToast.show();
-        }
-        if (document.getElementById('warningToast')) {
-            let warningToast = new bootstrap.Toast(document.getElementById('warningToast'));
-            warningToast.show();
-        }
-        if (document.getElementById('dangerToast')) {
-            let dangerToast = new bootstrap.Toast(document.getElementById('dangerToast'));
-            dangerToast.show();
-        }
+        const toasts = ['successToast', 'warningToast', 'dangerToast'];
+        toasts.forEach(id => {
+            const toastElement = document.getElementById(id);
+            if (toastElement) {
+                let toast = new bootstrap.Toast(toastElement);
+                toast.show();
+            }
+        });
     };
 
     // Load data into edit modal
@@ -274,24 +271,33 @@
 </script>
 
 <style>
-    /* Increase font size for table content */
-    table {
+    /* Table Styling */
+    .table {
         font-size: 1rem;
     }
 
-    /* Customize table header background and font */
     .custom-table-header th {
         font-weight: bold;
     }
 
-    /* Increase font size for modal content */
+    /* Modal Styling */
     .modal-body, .modal-footer {
         font-size: 1.1rem;
+        background-color: #f7f7f7;
     }
 
     /* Toaster Styling */
     .toast .toast-body {
         font-size: 1rem;
+    }
+
+    .badge {
+        font-size: 0.875rem;
+        padding: 0.5em 0.75em;
+    }
+
+    .btn-sm {
+        margin-right: 5px;
     }
 </style>
 @endsection

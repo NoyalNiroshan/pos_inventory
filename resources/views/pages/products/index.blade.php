@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container-fluid" style="padding-top: 90px;">
-    <!-- Header and Add Product Button -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-0">Products</h1>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProductModal">Add Product</button>
@@ -40,12 +39,12 @@
 
     <!-- Products Table -->
     <div class="table-responsive">
-        <table class="table table-striped table-hover text-center align-middle">
-            <thead class="bg-primary text-white">
+        <table class="table table-bordered table-hover text-center align-middle">
+            <thead class="custom-table-header bg-primary text-white">
                 <tr>
                     <th>ID</th>
                     <th>Brand</th>
-                    <th>Subcategory</th>
+
                     <th>Image</th>
                     <th>Name</th>
                     <th>Stock Type</th>
@@ -53,7 +52,6 @@
                     <th>Active</th>
                     <th>In Stock</th>
                     <th>On Sale</th>
-
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -62,7 +60,7 @@
                     <tr>
                         <td>{{ $product->id }}</td>
                         <td>{{ $product->brand->name }}</td>
-                        <td>{{ $product->subcategory->name }}</td>
+                        
                         <td>
                             @if($product->image)
                                 <img src="{{ asset('storage/' . $product->image) }}" alt="Product Image" width="50" class="rounded">
@@ -88,14 +86,11 @@
                                 {{ $product->on_sale ? 'Yes' : 'No' }}
                             </span>
                         </td>
-
                         <td>
-                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal"
-                                    onclick="loadProductData({{ json_encode($product) }})">
+                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal" onclick="loadProductData({{ json_encode($product) }})">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewProductModal"
-                                    onclick="viewProductData({{ json_encode($product) }})">
+                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewProductModal" onclick="viewProductData({{ json_encode($product) }})">
                                 <i class="fas fa-eye"></i>
                             </button>
                             <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline-block;">
@@ -114,86 +109,89 @@
 
     <!-- Create Product Modal -->
     <div class="modal fade" id="createProductModal" tabindex="-1" aria-labelledby="createProductModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" novalidate>
                     @csrf
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="createProductModalLabel">Add New Product</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="brand_id" class="form-label">Brand</label>
-                                <select class="form-select" name="brand_id" required>
-                                    <option value="">Select Brand</option>
-                                    @foreach($brands as $brand)
-                                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                                    @endforeach
-                                </select>
+                        <div class="container-fluid">
+                            <div class="row g-4">
+                                <div class="col-md-6 mb-3">
+                                    <label for="brand_id" class="form-label">Brand</label>
+                                    <select class="form-select border border-dark" name="brand_id" required>
+                                        <option value="">Select Brand</option>
+                                        @foreach($brands as $brand)
+                                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="subcategory_id" class="form-label">Subcategory</label>
+                                    <select class="form-select border border-dark" name="subcategory_id" required>
+                                        <option value="">Select Subcategory</option>
+                                        @foreach($subcategories as $subcategory)
+                                            <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="subcategory_id" class="form-label">Subcategory</label>
-                                <select class="form-select" name="subcategory_id" required>
-                                    <option value="">Select Subcategory</option>
-                                    @foreach($subcategories as $subcategory)
-                                        <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                            <div class="row g-4">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Product Name</label>
+                                    <input type="text" class="form-control border border-dark" id="name" name="name" required>
+                                </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="name" class="form-label">Product Name</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="stock_type" class="form-label">Stock Type</label>
-                                <select class="form-select" name="stock_type" id="stock_type" required>
-                                    <option value="">Select Stock Type</option>
-                                    @foreach($stockTypes as $type)
-                                        <option value="{{ $type }}">{{ ucfirst($type) }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="serial_number" class="form-label">Serial Number (Optional)</label>
-                                <input type="text" class="form-control" id="serial_number" name="serial_number">
+                                <div class="col-md-6 mb-3">
+                                    <label for="stock_type" class="form-label">Stock Type</label>
+                                    <select class="form-select border border-dark" name="stock_type" id="stock_type" required>
+                                        <option value="">Select Stock Type</option>
+                                        <!-- Add new types here -->
+                                        @foreach(['liquid', 'solid', 'dress', 'powder', 'gas', 'electronics', 'medicine', 'furniture', 'cosmetics', 'food', 'beverage'] as $type)
+                                            <option value="{{ $type }}">{{ ucfirst($type) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="image" class="form-label">Product Image</label>
-                                <input type="file" class="form-control" id="image" name="image">
-                            </div>
-                        </div>
+                            <div class="row g-4">
+                                <div class="col-md-6 mb-3">
+                                    <label for="serial_number" class="form-label">Serial Number (Optional)</label>
+                                    <input type="text" class="form-control border border-dark" id="serial_number" name="serial_number">
+                                </div>
 
-                        <div class="row">
-                            <div class="col-md-4 mb-3 form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" checked>
-                                <label class="form-check-label" for="is_active">Active</label>
-                            </div>
-
-                            <div class="col-md-4 mb-3 form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="in_stock" name="in_stock" value="1" checked>
-                                <label class="form-check-label" for="in_stock">In Stock</label>
+                                <div class="col-md-6 mb-3">
+                                    <label for="image" class="form-label">Product Image</label>
+                                    <input type="file" class="form-control border border-dark" id="image" name="image">
+                                </div>
                             </div>
 
-                            <div class="col-md-4 mb-3 form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="on_sale" name="on_sale" value="1">
-                                <label class="form-check-label" for="on_sale">On Sale</label>
-                            </div>
-                        </div>
+                            <div class="row g-4">
+                                <div class="col-md-4 mb-3 form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" checked>
+                                    <label class="form-check-label" for="is_active">Active</label>
+                                </div>
 
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control" id="description" name="description"></textarea>
+                                <div class="col-md-4 mb-3 form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="in_stock" name="in_stock" value="1" checked>
+                                    <label class="form-check-label" for="in_stock">In Stock</label>
+                                </div>
+
+                                <div class="col-md-4 mb-3 form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="on_sale" name="on_sale" value="1">
+                                    <label class="form-check-label" for="on_sale">On Sale</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control border border-dark" id="description" name="description"></textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -207,99 +205,100 @@
 
     <!-- Edit Product Modal -->
     <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <form action="" method="POST" enctype="multipart/form-data" id="editProductForm">
+                <form action="" method="POST" enctype="multipart/form-data" id="editProductForm" novalidate>
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="id" id="edit-product-id">
 
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="edit-brand_id" class="form-label">Brand</label>
-                                <select class="form-select" id="edit-brand_id" name="brand_id" required>
-                                    @foreach($brands as $brand)
-                                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                                    @endforeach
-                                </select>
+                        <div class="container-fluid">
+                            <div class="row g-4">
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit-brand_id" class="form-label">Brand</label>
+                                    <select class="form-select border border-dark" id="edit-brand_id" name="brand_id" required>
+                                        @foreach($brands as $brand)
+                                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit-subcategory_id" class="form-label">Subcategory</label>
+                                    <select class="form-select border border-dark" id="edit-subcategory_id" name="subcategory_id" required>
+                                        @foreach($subcategories as $subcategory)
+                                            <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="edit-subcategory_id" class="form-label">Subcategory</label>
-                                <select class="form-select" id="edit-subcategory_id" name="subcategory_id" required>
-                                    @foreach($subcategories as $subcategory)
-                                        <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                            <div class="row g-4">
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit-name" class="form-label">Product Name</label>
+                                    <input type="text" class="form-control border border-dark" id="edit-name" name="name" required>
+                                </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="edit-name" class="form-label">Product Name</label>
-                                <input type="text" class="form-control" id="edit-name" name="name" required>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="edit-stock_type" class="form-label">Stock Type</label>
-                                <select class="form-select" id="edit-stock_type" name="stock_type" required>
-                                    @foreach($stockTypes as $type)
-                                        <option value="{{ $type }}">{{ ucfirst($type) }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="edit-serial_number" class="form-label">Serial Number (Optional)</label>
-                                <input type="text" class="form-control" id="edit-serial_number" name="serial_number">
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit-stock_type" class="form-label">Stock Type</label>
+                                    <select class="form-select border border-dark" id="edit-stock_type" name="stock_type" required>
+                                        @foreach(['liquid', 'solid', 'dress', 'powder', 'gas', 'electronics', 'medicine', 'furniture', 'cosmetics', 'food', 'beverage'] as $type)
+                                            <option value="{{ $type }}">{{ ucfirst($type) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="edit-image" class="form-label">Change Product Image</label>
-                                <input type="file" class="form-control" id="edit-image" name="image">
-                            </div>
-                        </div>
+                            <div class="row g-4">
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit-serial_number" class="form-label">Serial Number (Optional)</label>
+                                    <input type="text" class="form-control border border-dark" id="edit-serial_number" name="serial_number">
+                                </div>
 
-                        <div class="row">
-                            <div class="col-md-4 mb-3 form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="edit-is_active" name="is_active" value="1">
-                                <label class="form-check-label" for="edit-is_active">Active</label>
-                            </div>
-
-                            <div class="col-md-4 mb-3 form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="edit-in_stock" name="in_stock" value="1">
-                                <label class="form-check-label" for="edit-in_stock">In Stock</label>
+                                <div class="col-md-6 mb-3">
+                                    <label for="edit-image" class="form-label">Change Product Image</label>
+                                    <input type="file" class="form-control border border-dark" id="edit-image" name="image">
+                                </div>
                             </div>
 
-                            <div class="col-md-4 mb-3 form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="edit-on_sale" name="on_sale" value="1">
-                                <label class="form-check-label" for="edit-on_sale">On Sale</label>
+                            <div class="row g-4">
+                                <div class="col-md-4 mb-3 form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="edit-is_active" name="is_active" value="1">
+                                    <label class="form-check-label" for="edit-is_active">Active</label>
+                                </div>
+
+                                <div class="col-md-4 mb-3 form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="edit-in_stock" name="in_stock" value="1">
+                                    <label class="form-check-label" for="edit-in_stock">In Stock</label>
+                                </div>
+
+                                <div class="col-md-4 mb-3 form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="edit-on_sale" name="on_sale" value="1">
+                                    <label class="form-check-label" for="edit-on_sale">On Sale</label>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <label for="edit-description" class="form-label">Description</label>
-                            <textarea class="form-control" id="edit-description" name="description"></textarea>
-                        </div>
+                            <div class="mb-3">
+                                <label for="edit-description" class="form-label">Description</label>
+                                <textarea class="form-control border border-dark" id="edit-description" name="description"></textarea>
+                            </div>
 
-                        <!-- Display current image if available -->
-                        <div class="mb-3" id="edit-image-section">
-                            <label for="edit-image" class="form-label">Current Image</label>
-                            <div>
-                                <img id="edit-current-image" src="" alt="Product Image" width="100" class="rounded">
+                            <div class="mb-3" id="edit-image-section">
+                                <label for="edit-image" class="form-label">Current Image</label>
+                                <div>
+                                    <img id="edit-current-image" src="" alt="Product Image" width="100" class="rounded">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-warning">Save Changes</button>
                     </div>
                 </form>
             </div>
@@ -308,11 +307,11 @@
 
     <!-- View Product Modal -->
     <div class="modal fade" id="viewProductModal" tabindex="-1" aria-labelledby="viewProductModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="viewProductModalLabel">View Product Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -356,6 +355,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <script>
@@ -416,11 +416,6 @@
 </script>
 
 <style>
-    /* Table Header Style */
-    .bg-primary {
-        background-color: #007bff !important;
-    }
-
     .table th, .table td {
         vertical-align: middle;
         text-align: center;

@@ -56,4 +56,38 @@ class Product extends Model
     {
         return $this->hasMany(SaleItem::class, 'product_id');
     }
+
+
+    public function getAvailableUnits()
+    {
+        // Return available units based on stock type
+        switch ($this->stock_type) {
+            case 'liquid':
+                return ['L', 'ml']; // For liquids (e.g., oil, water)
+            case 'solid':
+                return ['kg', 'g']; // For solids (e.g., raw materials, solid goods)
+            case 'dress':
+                return ['XL', 'Large', 'Medium', 'Small']; // For clothing or apparel items
+            case 'powder':
+                return ['kg', 'g']; // For powders (e.g., flour, chemicals)
+            case 'gas':
+                return ['kg', 'm³']; // For gaseous products
+            case 'electronics':
+                return ['units']; // For electronic items (e.g., gadgets, devices)
+            case 'medicine':
+                return ['units']; // For medical supplies or pharmaceuticals
+            case 'furniture':
+                return ['pieces']; // For furniture items
+            case 'cosmetics':
+                return ['ml', 'g']; // For cosmetics or beauty products
+            case 'food':
+                return ['kg', 'g', 'pieces']; // For food products
+            case 'beverage':
+                return ['L', 'ml']; // For beverage products
+            default:
+                return [];
+        }
+    }
+
+
 }

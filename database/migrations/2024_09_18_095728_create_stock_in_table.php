@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('stock_in', function (Blueprint $table) {
             $table->string('id')->primary(); // Custom ID like 'st001'
             $table->string('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
             $table->date('stock_in_date');
             $table->string('batch_no')->nullable();
-            $table->decimal('total_amount', 10, 2);
+            $table->decimal('total_amount', 10, 2)->default(0);
             $table->timestamps();
         });
+
     }
 
     /**

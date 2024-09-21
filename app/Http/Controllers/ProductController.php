@@ -20,8 +20,8 @@ class ProductController extends Controller
         $brands = Brand::all(); // To populate the brand dropdown in the form
         $subcategories = Subcategory::all(); // To populate the subcategory dropdown in the form
 
-        // Stock type options for the dropdown
-        $stockTypes = ['liquid', 'solid', 'dress'];
+        // Add all stock type options for the dropdown
+        $stockTypes = ['liquid', 'solid', 'dress', 'powder', 'gas', 'electronics', 'medicine', 'furniture', 'cosmetics', 'food', 'beverage'];
 
         return view('pages.products.index', compact('products', 'brands', 'subcategories', 'stockTypes'));
     }
@@ -36,7 +36,7 @@ class ProductController extends Controller
             'brand_id' => 'required|exists:brands,id',
             'subcategory_id' => 'required|exists:subcategories,id',
             'name' => 'required|string|max:255',
-            'stock_type' => 'required|in:liquid,solid,dress', // Validate stock type
+            'stock_type' => 'required|in:liquid,solid,dress,powder,gas,electronics,medicine,furniture,cosmetics,food,beverage', // Validate stock type
             'serial_number' => 'nullable|string|max:255',
             'is_active' => 'boolean',
             'in_stock' => 'boolean',
@@ -68,7 +68,7 @@ class ProductController extends Controller
 
             return redirect()->back()->with('success', 'Product created successfully');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error creating product');
+            return redirect()->back()->with('error', 'Error creating product: ' . $e->getMessage());
         }
     }
 
@@ -84,7 +84,7 @@ class ProductController extends Controller
             'brand_id' => 'required|exists:brands,id',
             'subcategory_id' => 'required|exists:subcategories,id',
             'name' => 'required|string|max:255',
-            'stock_type' => 'required|in:liquid,solid,dress', // Validate stock type
+            'stock_type' => 'required|in:liquid,solid,dress,powder,gas,electronics,medicine,furniture,cosmetics,food,beverage', // Validate stock type
             'serial_number' => 'nullable|string|max:255',
             'is_active' => 'boolean',
             'in_stock' => 'boolean',
@@ -120,7 +120,7 @@ class ProductController extends Controller
 
             return redirect()->back()->with('warning', 'Product updated successfully');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error updating product');
+            return redirect()->back()->with('error', 'Error updating product: ' . $e->getMessage());
         }
     }
 
@@ -139,9 +139,9 @@ class ProductController extends Controller
 
             $product->delete();
 
-            return redirect()->back()->with('error', 'Product deleted successfully');
+            return redirect()->back()->with('success', 'Product deleted successfully');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error deleting product');
+            return redirect()->back()->with('error', 'Error deleting product: ' . $e->getMessage());
         }
     }
 }

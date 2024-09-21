@@ -51,7 +51,7 @@
     <!-- Subcategories Table -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover text-center align-middle">
-            <thead class="custom-table-header">
+            <thead class="custom-table-header bg-primary text-white">
                 <tr>
                     <th>ID</th>
                     <th>Category</th>
@@ -77,15 +77,23 @@
                             @endif
                         </td>
                         <td>
-                            <input type="checkbox" class="form-check-input" id="edit-toggle-{{ $subcategory->id }}" {{ $subcategory->is_active ? 'checked' : '' }} disabled>
+                            <span class="badge {{ $subcategory->is_active ? 'bg-success' : 'bg-danger' }}">
+                                {{ $subcategory->is_active ? 'Yes' : 'No' }}
+                            </span>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewSubcategoryModal" onclick="viewSubcategoryData({{ json_encode($subcategory) }})">View</button>
-                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editSubcategoryModal" onclick="loadSubcategoryData({{ json_encode($subcategory) }})">Edit</button>
+                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewSubcategoryModal" onclick="viewSubcategoryData({{ json_encode($subcategory) }})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editSubcategoryModal" onclick="loadSubcategoryData({{ json_encode($subcategory) }})">
+                                <i class="fas fa-edit"></i>
+                            </button>
                             <form action="{{ route('subcategories.destroy', $subcategory->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -100,9 +108,9 @@
             <div class="modal-content">
                 <form action="{{ route('subcategories.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="createSubcategoryModalLabel">Add New Subcategory</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
@@ -153,9 +161,9 @@
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="id" id="edit-subcategory-id">
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="editSubcategoryModalLabel">Edit Subcategory</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
@@ -197,7 +205,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-warning">Save changes</button>
                     </div>
                 </form>
             </div>
@@ -208,9 +216,9 @@
     <div class="modal fade" id="viewSubcategoryModal" tabindex="-1" aria-labelledby="viewSubcategoryModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="viewSubcategoryModalLabel">View Subcategory</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -273,7 +281,6 @@
         document.getElementById('edit-name').value = subcategory.name;
         document.getElementById('edit-description').value = subcategory.description;
         document.getElementById('edit-is_active').checked = subcategory.is_active;
-
         document.getElementById('edit-category_id').value = subcategory.category_id;
 
         if (subcategory.image) {
@@ -320,6 +327,15 @@
     /* Toaster Styling */
     .toast .toast-body {
         font-size: 1rem;
+    }
+
+    .badge {
+        font-size: 0.875rem;
+        padding: 0.5em 0.75em;
+    }
+
+    .btn-sm {
+        margin-right: 5px;
     }
 </style>
 @endsection

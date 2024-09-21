@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container-fluid" style="padding-top: 90px;">
-    <!-- Add padding to push content below the header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-0">Brands</h1>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createBrandModal">Add Brand</button>
@@ -51,7 +50,7 @@
 
     <!-- Brands Table -->
     <div class="table-responsive">
-        <table class="table table-bordered table-hover text-center align-middle">
+        <table class="table table-striped table-hover text-center align-middle">
             <thead class="custom-table-header bg-primary text-white">
                 <tr>
                     <th>ID</th>
@@ -103,26 +102,26 @@
 
     <!-- Create Brand Modal -->
     <div class="modal fade" id="createBrandModal" tabindex="-1" aria-labelledby="createBrandModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ route('brands.store') }}" method="POST" enctype="multipart/form-data" id="createBrandForm">
+                <form action="{{ route('brands.store') }}" method="POST" enctype="multipart/form-data" id="createBrandForm" novalidate>
                     @csrf
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="createBrandModalLabel">Add New Brand</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="create-name" class="form-label">Brand Name</label>
-                            <input type="text" class="form-control" id="create-name" name="name" required>
+                            <label for="create-name" class="form-label">Brand Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control border border-dark" id="create-name" name="name" required>
                         </div>
                         <div class="mb-3">
                             <label for="create-description" class="form-label">Description</label>
-                            <textarea class="form-control" id="create-description" name="description"></textarea>
+                            <textarea class="form-control border border-dark" id="create-description" name="description"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="create-image" class="form-label">Brand Image</label>
-                            <input type="file" class="form-control" id="create-image" name="image">
+                            <input type="file" class="form-control border border-dark" id="create-image" name="image">
                         </div>
                         <div class="mb-3 form-check form-switch">
                             <input type="hidden" name="is_active" value="0">
@@ -141,24 +140,24 @@
 
     <!-- Edit Brand Modal -->
     <div class="modal fade" id="editBrandModal" tabindex="-1" aria-labelledby="editBrandModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <form action="" method="POST" enctype="multipart/form-data" id="editBrandForm">
+                <form action="" method="POST" enctype="multipart/form-data" id="editBrandForm" novalidate>
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="id" id="edit-brand-id">
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="editBrandModalLabel">Edit Brand</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="edit-name" class="form-label">Brand Name</label>
-                            <input type="text" class="form-control" id="edit-name" name="name" required>
+                            <label for="edit-name" class="form-label">Brand Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control border border-dark" id="edit-name" name="name" required>
                         </div>
                         <div class="mb-3">
                             <label for="edit-description" class="form-label">Description</label>
-                            <textarea class="form-control" id="edit-description" name="description"></textarea>
+                            <textarea class="form-control border border-dark" id="edit-description" name="description"></textarea>
                         </div>
                         <div class="mb-3" id="edit-image-section">
                             <label for="edit-image" class="form-label">Current Image</label>
@@ -168,7 +167,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="edit-image" class="form-label">Change Brand Image</label>
-                            <input type="file" class="form-control" id="edit-image" name="image">
+                            <input type="file" class="form-control border border-dark" id="edit-image" name="image">
                         </div>
                         <div class="mb-3 form-check form-switch">
                             <input type="hidden" name="is_active" value="0">
@@ -187,11 +186,11 @@
 
     <!-- View Brand Modal -->
     <div class="modal fade" id="viewBrandModal" tabindex="-1" aria-labelledby="viewBrandModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="viewBrandModalLabel">View Brand</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -228,18 +227,14 @@
 <script>
     // Toast initialization on page load
     window.onload = function() {
-        if (document.getElementById('successToast')) {
-            let successToast = new bootstrap.Toast(document.getElementById('successToast'));
-            successToast.show();
-        }
-        if (document.getElementById('warningToast')) {
-            let warningToast = new bootstrap.Toast(document.getElementById('warningToast'));
-            warningToast.show();
-        }
-        if (document.getElementById('dangerToast')) {
-            let dangerToast = new bootstrap.Toast(document.getElementById('dangerToast'));
-            dangerToast.show();
-        }
+        const toasts = ['successToast', 'warningToast', 'dangerToast'];
+        toasts.forEach(id => {
+            const toastElement = document.getElementById(id);
+            if (toastElement) {
+                let toast = new bootstrap.Toast(toastElement);
+                toast.show();
+            }
+        });
     };
 
     // Load data into edit modal
@@ -280,27 +275,22 @@
     .table {
         font-size: 1rem;
     }
-
     .custom-table-header th {
         font-weight: bold;
     }
-
     /* Modal Styling */
     .modal-body, .modal-footer {
         font-size: 1.1rem;
         background-color: #f7f7f7;
     }
-
     /* Toaster Styling */
     .toast .toast-body {
         font-size: 1rem;
     }
-
     .badge {
         font-size: 0.875rem;
         padding: 0.5em 0.75em;
     }
-
     .btn-sm {
         margin-right: 5px;
     }

@@ -50,4 +50,19 @@ class SupplierStockPaymentController extends Controller
         $payments = SupplierStockPayment::with('stockIn.supplier')->get();
         return view('pages.payments.index', compact('payments'));
     }
+
+    // Show a specific payment
+    public function show($id)
+    {
+        $payment = SupplierStockPayment::with('stockIn.supplier')->findOrFail($id);
+        return view('pages.payments.show', compact('payment'));
+    }
+
+    // Delete a payment
+    public function destroy($id)
+    {
+        $payment = SupplierStockPayment::findOrFail($id);
+        $payment->delete();
+        return redirect()->back()->with('success', 'Payment deleted successfully.');
+    }
 }

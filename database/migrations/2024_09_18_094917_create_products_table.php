@@ -18,8 +18,23 @@ return new class extends Migration
             $table->string('subcategory_id'); // Foreign key to subcategories
             $table->foreign('subcategory_id')->references('id')->on('subcategories')->onDelete('cascade');
             $table->string('name');
-            $table->enum('stock_type', ['liquid', 'solid', 'dress']); // Stock type enum
-            $table->string('serial_number')->unique();
+
+            // Expanded stock types
+            $table->enum('stock_type', [
+                'liquid',    // For liquids (e.g., oil, water)
+                'solid',     // For solids (e.g., raw materials, solid goods)
+                'dress',     // For clothing or apparel items
+                'powder',    // For powders (e.g., flour, chemicals)
+                'gas',       // For gaseous products
+                'electronics', // For electronic items (e.g., gadgets, devices)
+                'medicine',  // For medical supplies or pharmaceuticals
+                'furniture', // For furniture items
+                'cosmetics', // For cosmetics or beauty products
+                'food',      // For food products
+                'beverage'   // For beverages
+            ]);
+
+            $table->string('serial_number')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('in_stock')->default(true);
             $table->boolean('on_sale')->default(false);

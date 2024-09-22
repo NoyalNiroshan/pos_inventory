@@ -1,15 +1,22 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SupplierStockPayment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'stock_in_id', 'supplier_id', 'amount_paid', 'balance_due', 'payment_method', 'payment_date'];
+    protected $table = 'supplier_stock_payments';
+
+    protected $fillable = [
+        'id', 'stock_in_id', 'amount_paid', 'balance_due', 'payment_method', 'payment_date'
+    ];
+
+    protected $casts = [
+        'payment_date' => 'date',
+    ];
 
     public $incrementing = false;
 
@@ -17,17 +24,10 @@ class SupplierStockPayment extends Model
     {
         parent::boot();
 
-        static::creating(function ($supplierStockPayment) {
-            if (empty($supplierStockPayment->id)) {
-                $latestPayment = SupplierStockPayment::orderBy('id', 'desc')->first();
-                if ($latestPayment) {
-                    $numericPart = (int) substr($latestPayment->id, 3);
-                    $newId = 'ssp' . str_pad($numericPart + 1, 3, '0', STR_PAD_LEFT);
-                } else {
-                    $newId = 'ssp001';
-                }
-                $supplierStockPayment->id = $newId;
-            }
+        static::creating(function ($payment) {
+            $latestPayment = SupplierStockPayment::orderBy('id', 'desc')->first();
+            $numericPart = $latestPayment ? (int) substr($latestPayment->id, 3) : 0;
+            $payment->id = 'ssp' . str_pad($numericPart + 1, 3, '0', STR_PAD_LEFT);
         });
     }
 

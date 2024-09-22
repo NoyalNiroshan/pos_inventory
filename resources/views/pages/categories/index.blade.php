@@ -3,8 +3,8 @@
 @section('content')
 <div class="container-fluid" style="padding-top: 90px;">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="mb-0">Brands</h1>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createBrandModal">Add Brand</button>
+        <h1 class="mb-0">Categories</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCategoryModal">Add Category</button>
     </div>
 
     <!-- Toast Container -->
@@ -48,9 +48,9 @@
         </div>
     </div>
 
-    <!-- Brands Table -->
+    <!-- Categories Table -->
     <div class="table-responsive">
-        <table class="table table-striped table-hover text-center align-middle">
+        <table class="table table-striped table-bordered table-hover text-center align-middle">
             <thead class="custom-table-header bg-primary text-white">
                 <tr>
                     <th>ID</th>
@@ -62,31 +62,31 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($brands as $brand)
+                @foreach($categories as $category)
                     <tr>
-                        <td>{{ $brand->id }}</td>
-                        <td>{{ $brand->name }}</td>
-                        <td>{{ $brand->description }}</td>
+                        <td>{{ $category->id }}</td>
+                        <td>{{ $category->name }}</td>
+                        <td>{{ $category->description }}</td>
                         <td>
-                            @if($brand->image)
-                                <img src="{{ asset('storage/' . $brand->image) }}" alt="Brand Image" width="50" class="rounded">
+                            @if($category->image)
+                                <img src="{{ asset('storage/' . $category->image) }}" alt="Category Image" width="50" class="rounded">
                             @else
                                 <span class="text-muted">No Image</span>
                             @endif
                         </td>
                         <td>
-                            <span class="badge {{ $brand->is_active ? 'bg-success' : 'bg-danger' }}">
-                                {{ $brand->is_active ? 'Yes' : 'No' }}
+                            <span class="badge {{ $category->is_active ? 'bg-success' : 'bg-danger' }}">
+                                {{ $category->is_active ? 'Yes' : 'No' }}
                             </span>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewBrandModal" onclick="viewBrandData({{ json_encode($brand) }})">
+                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewCategoryModal" onclick="viewCategoryData({{ json_encode($category) }})">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editBrandModal" onclick="loadBrandData({{ json_encode($brand) }})">
+                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editCategoryModal" onclick="loadCategoryData({{ json_encode($category) }})">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <form action="{{ route('brands.destroy', $brand->id) }}" method="POST" style="display:inline-block;">
+                            <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">
@@ -100,19 +100,19 @@
         </table>
     </div>
 
-    <!-- Create Brand Modal -->
-    <div class="modal fade" id="createBrandModal" tabindex="-1" aria-labelledby="createBrandModalLabel" aria-hidden="true">
+    <!-- Create Category Modal -->
+    <div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ route('brands.store') }}" method="POST" enctype="multipart/form-data" id="createBrandForm" novalidate>
+                <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data" id="createCategoryForm" novalidate>
                     @csrf
                     <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="createBrandModalLabel">Add New Brand</h5>
+                        <h5 class="modal-title" id="createCategoryModalLabel">Add New Category</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="create-name" class="form-label">Brand Name <span class="text-danger">*</span></label>
+                            <label for="create-name" class="form-label">Category Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control border border-dark" id="create-name" name="name" required>
                         </div>
                         <div class="mb-3">
@@ -120,7 +120,7 @@
                             <textarea class="form-control border border-dark" id="create-description" name="description"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="create-image" class="form-label">Brand Image</label>
+                            <label for="create-image" class="form-label">Category Image</label>
                             <input type="file" class="form-control border border-dark" id="create-image" name="image">
                         </div>
                         <div class="mb-3 form-check form-switch">
@@ -138,21 +138,21 @@
         </div>
     </div>
 
-    <!-- Edit Brand Modal -->
-    <div class="modal fade" id="editBrandModal" tabindex="-1" aria-labelledby="editBrandModalLabel" aria-hidden="true">
+    <!-- Edit Category Modal -->
+    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <form action="" method="POST" enctype="multipart/form-data" id="editBrandForm" novalidate>
+                <form action="" method="POST" enctype="multipart/form-data" id="editCategoryForm" novalidate>
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="id" id="edit-brand-id">
+                    <input type="hidden" name="id" id="edit-category-id">
                     <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="editBrandModalLabel">Edit Brand</h5>
+                        <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="edit-name" class="form-label">Brand Name <span class="text-danger">*</span></label>
+                            <label for="edit-name" class="form-label">Category Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control border border-dark" id="edit-name" name="name" required>
                         </div>
                         <div class="mb-3">
@@ -162,11 +162,11 @@
                         <div class="mb-3" id="edit-image-section">
                             <label for="edit-image" class="form-label">Current Image</label>
                             <div>
-                                <img id="edit-current-image" src="" alt="Brand Image" width="100" class="rounded">
+                                <img id="edit-current-image" src="" alt="Category Image" width="100" class="rounded">
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="edit-image" class="form-label">Change Brand Image</label>
+                            <label for="edit-image" class="form-label">Change Category Image</label>
                             <input type="file" class="form-control border border-dark" id="edit-image" name="image">
                         </div>
                         <div class="mb-3 form-check form-switch">
@@ -184,18 +184,18 @@
         </div>
     </div>
 
-    <!-- View Brand Modal -->
-    <div class="modal fade" id="viewBrandModal" tabindex="-1" aria-labelledby="viewBrandModalLabel" aria-hidden="true">
+    <!-- View Category Modal -->
+    <div class="modal fade" id="viewCategoryModal" tabindex="-1" aria-labelledby="viewCategoryModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="viewBrandModalLabel">View Brand</h5>
+                    <h5 class="modal-title" id="viewCategoryModalLabel">View Category</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
                         <strong>ID:</strong>
-                        <p id="view-brand-id"></p>
+                        <p id="view-category-id"></p>
                     </div>
                     <div class="mb-3">
                         <strong>Name:</strong>
@@ -212,7 +212,7 @@
                     <div class="mb-3" id="view-image-section">
                         <strong>Image:</strong>
                         <div>
-                            <img id="view-image" src="" alt="Brand Image" width="100" class="rounded">
+                            <img id="view-image" src="" alt="Category Image" width="100" class="rounded">
                         </div>
                     </div>
                 </div>
@@ -238,16 +238,16 @@
     };
 
     // Load data into edit modal
-    function loadBrandData(brand) {
-        const editForm = document.getElementById('editBrandForm');
-        editForm.action = `/brands/${brand.id}`;
-        document.getElementById('edit-brand-id').value = brand.id;
-        document.getElementById('edit-name').value = brand.name;
-        document.getElementById('edit-description').value = brand.description;
-        document.getElementById('edit-is_active').checked = brand.is_active;
+    function loadCategoryData(category) {
+        const editForm = document.getElementById('editCategoryForm');
+        editForm.action = `/categories/${category.id}`;
+        document.getElementById('edit-category-id').value = category.id;
+        document.getElementById('edit-name').value = category.name;
+        document.getElementById('edit-description').value = category.description;
+        document.getElementById('edit-is_active').checked = category.is_active;
 
-        if (brand.image) {
-            document.getElementById('edit-current-image').src = '/storage/' + brand.image;
+        if (category.image) {
+            document.getElementById('edit-current-image').src = '/storage/' + category.image;
             document.getElementById('edit-image-section').style.display = 'block';
         } else {
             document.getElementById('edit-image-section').style.display = 'none';
@@ -255,14 +255,14 @@
     }
 
     // Load data into view modal
-    function viewBrandData(brand) {
-        document.getElementById('view-brand-id').innerText = brand.id;
-        document.getElementById('view-name').innerText = brand.name;
-        document.getElementById('view-description').innerText = brand.description;
-        document.getElementById('view-is_active').innerText = brand.is_active ? 'Yes' : 'No';
+    function viewCategoryData(category) {
+        document.getElementById('view-category-id').innerText = category.id;
+        document.getElementById('view-name').innerText = category.name;
+        document.getElementById('view-description').innerText = category.description;
+        document.getElementById('view-is_active').innerText = category.is_active ? 'Yes' : 'No';
 
-        if (brand.image) {
-            document.getElementById('view-image').src = '/storage/' + brand.image;
+        if (category.image) {
+            document.getElementById('view-image').src = '/storage/' + category.image;
             document.getElementById('view-image').style.display = 'block';
         } else {
             document.getElementById('view-image').style.display = 'none';
@@ -275,22 +275,27 @@
     .table {
         font-size: 1rem;
     }
+
     .custom-table-header th {
         font-weight: bold;
     }
+
     /* Modal Styling */
     .modal-body, .modal-footer {
         font-size: 1.1rem;
         background-color: #f7f7f7;
     }
+
     /* Toaster Styling */
     .toast .toast-body {
         font-size: 1rem;
     }
+
     .badge {
         font-size: 0.875rem;
         padding: 0.5em 0.75em;
     }
+
     .btn-sm {
         margin-right: 5px;
     }

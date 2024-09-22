@@ -1,16 +1,16 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Brand;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class BrandController extends Controller
+class CategoryController extends Controller
 {
     public function index()
     {
-        $brands = Brand::all();
-        return view('pages.brands.index', compact('brands'));
+        $categories = Category::all();
+        return view('pages.categories.index', compact('categories'));
     }
 
     public function store(Request $request)
@@ -22,26 +22,24 @@ class BrandController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        // Handle the image upload
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('brand_images', 'public');
+            $imagePath = $request->file('image')->store('category_images', 'public');
         }
 
-        // Create a new brand
-        Brand::create([
+        Category::create([
             'name' => $validatedData['name'],
             'description' => $validatedData['description'] ?? null,
             'image' => $imagePath,
             'is_active' => $request->is_active ?? true,
         ]);
 
-        return redirect()->back()->with('success', 'Brand created successfully');
+        return redirect()->back()->with('success', 'Category created successfully');
     }
 
     public function update(Request $request, $id)
     {
-        $brand = Brand::findOrFail($id);
+        $category = Category::findOrFail($id);
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -50,39 +48,35 @@ class BrandController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        // Handle the image upload if available
         if ($request->hasFile('image')) {
-            // Delete the old image if exists
-            if ($brand->image) {
-                Storage::delete('public/' . $brand->image);
+            if ($category->image) {
+                Storage::delete('public/' . $category->image);
             }
-            // Store new image
-            $imagePath = $request->file('image')->store('brand_images', 'public');
+            $imagePath = $request->file('image')->store('category_images', 'public');
         } else {
-            $imagePath = $brand->image;
+            $imagePath = $category->image;
         }
 
-        // Update the brand with new data
-        $brand->update([
+        $category->update([
             'name' => $validatedData['name'],
             'description' => $validatedData['description'] ?? null,
             'image' => $imagePath,
             'is_active' => $request->is_active ?? true,
         ]);
 
-        return redirect()->back()->with('warning', 'Brand updated successfully');
+        return redirect()->back()->with('warning', 'Category updated successfully');
     }
 
     public function destroy($id)
     {
-        $brand = Brand::findOrFail($id);
+        $category = Category::findOrFail($id);
 
-        if ($brand->image) {
-            Storage::delete('public/' . $brand->image);
+        if ($category->image) {
+            Storage::delete('public/' . $category->image);
         }
 
-        $brand->delete();
+        $category->delete();
 
-        return redirect()->back()->with('error', 'Brand deleted successfully');
+        return redirect()->back()->with('error', 'Category deleted successfully');
     }
 }

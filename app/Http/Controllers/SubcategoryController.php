@@ -1,88 +1,90 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class BrandController extends Controller
+class SubcategoryController extends Controller
 {
     public function index()
     {
-        $brands = Brand::all();
-        return view('pages.brands.index', compact('brands'));
+        $subcategories = Subcategory::with('category')->get();
+        $categories = Category::all();
+
+        return view('pages.subcategories.index', compact('subcategories', 'categories'));
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+            'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'is_active' => 'boolean',
         ]);
 
-        // Handle the image upload
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('brand_images', 'public');
+            $imagePath = $request->file('image')->store('subcategory_images', 'public');
         }
 
-        // Create a new brand
-        Brand::create([
+        Subcategory::create([
+            'category_id' => $validatedData['category_id'],
             'name' => $validatedData['name'],
             'description' => $validatedData['description'] ?? null,
             'image' => $imagePath,
             'is_active' => $request->is_active ?? true,
         ]);
 
-        return redirect()->back()->with('success', 'Brand created successfully');
+        return redirect()->back()->with('success', 'Subcategory created successfully');
     }
 
     public function update(Request $request, $id)
     {
-        $brand = Brand::findOrFail($id);
+        $subcategory = Subcategory::findOrFail($id);
 
         $validatedData = $request->validate([
+            'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'is_active' => 'boolean',
         ]);
 
-        // Handle the image upload if available
         if ($request->hasFile('image')) {
-            // Delete the old image if exists
-            if ($brand->image) {
-                Storage::delete('public/' . $brand->image);
+            if ($subcategory->image) {
+                Storage::delete('public/' . $subcategory->image);
             }
-            // Store new image
-            $imagePath = $request->file('image')->store('brand_images', 'public');
+            $imagePath = $request->file('image')->store('subcategory_images', 'public');
         } else {
-            $imagePath = $brand->image;
+            $imagePath = $subcategory->image;
         }
 
-        // Update the brand with new data
-        $brand->update([
+        $subcategory->update([
+            'category_id' => $validatedData['category_id'],
             'name' => $validatedData['name'],
             'description' => $validatedData['description'] ?? null,
             'image' => $imagePath,
             'is_active' => $request->is_active ?? true,
         ]);
 
-        return redirect()->back()->with('warning', 'Brand updated successfully');
+        return redirect()->back()->with('warning', 'Subcategory updated successfully');
     }
 
     public function destroy($id)
     {
-        $brand = Brand::findOrFail($id);
+        $subcategory = Subcategory::findOrFail($id);
 
-        if ($brand->image) {
-            Storage::delete('public/' . $brand->image);
+        if ($subcategory->image) {
+            Storage::delete('public/' . $subcategory->image);
         }
 
-        $brand->delete();
+        $subcategory->delete();
 
-        return redirect()->back()->with('error', 'Brand deleted successfully');
+        return redirect()->back()->with('error', 'Subcategory deleted successfully');
     }
 }

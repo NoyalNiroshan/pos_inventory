@@ -8,7 +8,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use Barryvdh\DomPDF\Facade\Pdf as DomPDF;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
+// use Barryvdh\DomPDF\Facade\Pdf;
 
 class StockInController extends Controller
 {

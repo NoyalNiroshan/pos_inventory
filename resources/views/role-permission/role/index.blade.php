@@ -15,8 +15,8 @@
             
             <div class="card">
                 <div class="card-header">
-                    <h4>Permissions
-                        <a href="{{ url('permissions/create') }}" class="btn btn-primary float-end">Add Permission</a>
+                    <h4>Roles
+                        <a href="{{ url('roles/create') }}" class="btn btn-primary float-end">Add Permission</a>
                     </h4>
                 </div>
                 <div class="card-body">
@@ -24,21 +24,23 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Permission Name</th>
+                                <th>Role Name</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($permisions as $permission)
+                            @forelse($roles as $role)
                                 <tr>
-                                    <td>{{ $permission->id }}</td>
-                                    <td>{{ $permission->name }}</td>
+                                    <td>{{ $role->id }}</td>
+                                    <td>{{ $role->name }}</td>
                                     <td>
                                         <!-- Edit Button -->
-                                        <a href="{{ url('permissions/'.$permission->id.'/edit') }}" class="btn btn-success btn-sm">Edit</a>
+                                        <a href="{{ route('roles.addPermissions', $role->id) }}" class="btn btn-success btn-sm">Add or Edit Role Permissions</a>
+
+                                        <a href="{{ url('roles/'.$role->id.'/edit') }}" class="btn btn-success btn-sm">Edit</a>
                                         
                                         <!-- Delete Button -->
-                                        <form action="{{ url('permissions/'.$permission->id) }}" method="POST" style="display:inline-block;">
+                                        <form action="{{ url('roles/'.$role->id) }}" method="POST" style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this permission?')">Delete</button>
@@ -47,7 +49,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3">No permissions found</td>
+                                    <td colspan="3">No roles found</td>
                                 </tr>
                             @endforelse
                         </tbody>

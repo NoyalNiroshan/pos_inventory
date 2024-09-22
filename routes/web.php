@@ -1,9 +1,13 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
-use Illuminate\Support\Facades\Route;
+
+
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\ProductController;
@@ -41,12 +45,29 @@ Route::get('supplier-stock-payments/create/{stockIn}', [SupplierStockPaymentCont
 //pdf for supplier payments
 Route::get('stock-in/{stockIn}/invoice', [StockInController::class, 'generateInvoice'])->name('stock-in.generate-invoice');
 
+use GuzzleHttp\Middleware;
+
+
+Route::group(['middleware'=>'auth'],function()
+{
+
 
 // Product Units API
 Route::get('/products/{id}/units', function($id) {
     $product = Product::findOrFail($id);
     return response()->json($product->getAvailableUnits());
 });
+
+Route::resource('permissions',PermissionController::class);
+Route::resource('roles',RoleController::class);
+Route::resource('users',UserController::class);
+
+Route::get('roles/{roleId}/give-permissions', [App\Http\Controllers\RoleController::class, 'addPermissionToRole'])->name('roles.addPermissions');
+Route::put('roles/{roleId}/give-permissions', [App\Http\Controllers\RoleController::class, 'givePermissionToRole'])->name('roles.givePermissions');
+
+});
+Route::resource('brands',BrandController::class);
+
 
 // Dashboard Route
 Route::get('/', function () {

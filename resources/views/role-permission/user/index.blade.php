@@ -15,8 +15,8 @@
             
             <div class="card">
                 <div class="card-header">
-                    <h4>Permissions
-                        <a href="{{ url('permissions/create') }}" class="btn btn-primary float-end">Add Permission</a>
+                    <h4>Users
+                        <a href="{{ url('users/create') }}" class="btn btn-primary float-end">Add User</a>
                     </h4>
                 </div>
                 <div class="card-body">
@@ -24,21 +24,37 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Permission Name</th>
+                                <th>User Name</th>
+                                <th>Email</th>
+                                <th>Roles</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($permisions as $permission)
+                            @forelse($users as $user)
                                 <tr>
-                                    <td>{{ $permission->id }}</td>
-                                    <td>{{ $permission->name }}</td>
+                                    <td>{{ $user->id }}</td>
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
                                     <td>
-                                        <!-- Edit Button -->
-                                        <a href="{{ url('permissions/'.$permission->id.'/edit') }}" class="btn btn-success btn-sm">Edit</a>
+                                        @if(!empty($user->getRoleNames()))
+                                        @foreach ($user->getRoleNames() as $rolename)
+                                        <span class="badge bg-primary mx-1 p-2 text-uppercase fw-bold">
+                                            {{$rolename}}
+                                        </span>
+                                        
+                                            
+                                        @endforeach
+                                        @endif
+                                          
+                                    </td>
+                                
+                          <td>
+
+                                        <a href="{{ url('users/'.$user->id.'/edit') }}" class="btn btn-success btn-sm">Edit</a>
                                         
                                         <!-- Delete Button -->
-                                        <form action="{{ url('permissions/'.$permission->id) }}" method="POST" style="display:inline-block;">
+                                        <form action="{{ url('users/'.$user->id) }}" method="POST" style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this permission?')">Delete</button>
@@ -47,7 +63,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3">No permissions found</td>
+                                    <td colspan="3">No roles found</td>
                                 </tr>
                             @endforelse
                         </tbody>

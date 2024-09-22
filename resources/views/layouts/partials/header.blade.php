@@ -176,30 +176,25 @@
                     <span class="d-none d-xl-inline-block ms-1 fw-medium">{{ Auth::user()->name }}</span>
                     @else
                     <!-- Show Register/Login links when not logged in -->
-                    <a href="{{ route('register') }}" class="d-none d-xl-inline-block ms-1 fw-medium">Register</a> /
-                    <a href="{{ route('login') }}" class="d-none d-xl-inline-block ms-1 fw-medium">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary mx-3 px-4 py-2">Register</a> 
+                    <a href="{{ route('login') }}" class="btn btn-primary mx-3 px-4 py-2">Login</a>
                                 @endif
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
+                @if (Auth::check())
                 <div class="dropdown-menu dropdown-menu-end">
-                    <!-- item-->
-                    <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi mdi-face-man font-size-16 align-middle me-1"></i> Profile</a>
-                    {{-- <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock Screen</a> --}}
+                    {{-- <a class="dropdown-item" href="{{ route('profile.show') }}">
+                        <i class="mdi mdi-face-man font-size-16 align-middle me-1"></i> Profile
+                    </a> --}}
                     <div class="dropdown-divider"></div>
-                    {{-- <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a> --}}
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-
-                        <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault();
-                                            this.closest('form').submit();">
-                            {{ __('Log Out') }}
-                        </x-dropdown-link>
-
-
+                        <button type="submit" class="dropdown-item">
+                            <i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout
+                        </button>
                     </form>
-
                 </div>
+            @endif
             </div>
 
         </div>

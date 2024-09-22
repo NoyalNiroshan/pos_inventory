@@ -1,4 +1,4 @@
-<x-guest-layout>
+{{-- <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -44,4 +44,43 @@
             </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
+</x-guest-layout> --}}
+
+@extends('layouts.app')
+@section('content')
+<div class="page-content">
+<!-- resources/views/auth/login-form.blade.php -->
+
+<form method="POST" action="{{ route('login') }}">
+    @csrf
+
+    <!-- Email -->
+    <div class="form-group">
+        <label for="email">{{ __('Email Address') }}</label>
+        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group mt-3">
+        <label for="password">{{ __('Password') }}</label>
+        <input id="password" type="password" class="form-control" name="password" required>
+    </div>
+
+    <!-- Remember Me -->
+    <div class="form-check mt-3">
+        <input class="form-check-input" type="checkbox" name="remember" id="remember">
+        <label class="form-check-label" for="remember">
+            {{ __('Remember Me') }}
+        </label>
+    </div>
+
+    <!-- Submit -->
+    <div class="form-group mt-4">
+        <button type="submit" class="btn btn-primary">
+            {{ __('Login') }}
+        </button>
+    </div>
+</form>
+
+</div>
+@endsection

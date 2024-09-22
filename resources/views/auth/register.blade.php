@@ -1,4 +1,4 @@
-<x-guest-layout>
+{{-- <x-guest-layout>
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -49,4 +49,48 @@
             </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
+</x-guest-layout> --}}
+@extends('layouts.app')
+@section('content')
+<div class="page-content">
+<!-- resources/views/auth/register-form.blade.php -->
+
+<form method="POST" action="{{ route('register') }}">
+    @csrf
+
+    <!-- Name -->
+    <div class="form-group">
+        <label for="name">{{ __('Name') }}</label>
+        <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group mt-3">
+        <label for="email">{{ __('Email Address') }}</label>
+        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group mt-3">
+        <label for="password">{{ __('Password') }}</label>
+        <input id="password" type="password" class="form-control" name="password" required>
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="form-group mt-3">
+        <label for="password_confirmation">{{ __('Confirm Password') }}</label>
+        <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" required>
+    </div>
+
+    <!-- Submit -->
+    <div class="form-group mt-4">
+        <button type="submit" class="btn btn-primary">
+            {{ __('Register') }}
+        </button>
+    </div>
+</form>
+
+</div>
+
+
+@endsection

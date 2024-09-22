@@ -155,19 +155,30 @@
                     </div>
                 </div>
             </div>
-  
+
+
+
+
+
+
+
+
+            
             
 
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item bg-light-subtle border-start border-end" id="page-header-user-dropdown"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="{{asset('assets/images/users/avatar-1.jpg')}}"
-                        alt="Header Avatar">
+                   
                         @if (Auth::check())
+                        <img class="rounded-circle header-profile-user" src="{{asset('assets/images/users/avatar-1.jpg')}}"
+                        alt="Header Avatar">
                     <span class="d-none d-xl-inline-block ms-1 fw-medium">{{ Auth::user()->name }}</span>
                     @else
-                    <span class="d-none d-xl-inline-block ms-1 fw-medium">Guest</span>
-                    @endif
+                    <!-- Show Register/Login links when not logged in -->
+                    <a href="{{ route('register') }}" class="d-none d-xl-inline-block ms-1 fw-medium">Register</a> /
+                    <a href="{{ route('login') }}" class="d-none d-xl-inline-block ms-1 fw-medium">Login</a>
+                                @endif
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">

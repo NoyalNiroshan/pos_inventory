@@ -69,6 +69,7 @@
 
         {{-- <!-- preloader css -->
         <link rel="stylesheet" href="{{asset('assets/css/preloader.min.css')}}" type="text/css" /> --}}
+        <link href="{{asset('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css')}}" rel="stylesheet">
 
         <!-- Bootstrap Css -->
         <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" />

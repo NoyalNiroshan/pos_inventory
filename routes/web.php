@@ -6,7 +6,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
+use GuzzleHttp\Middleware;
 
+Route::group(['middleware'=>'auth'],function()
+{
 
 Route::resource('permissions',PermissionController::class);
 Route::resource('roles',RoleController::class);
@@ -15,7 +18,7 @@ Route::resource('users',UserController::class);
 Route::get('roles/{roleId}/give-permissions', [App\Http\Controllers\RoleController::class, 'addPermissionToRole'])->name('roles.addPermissions');
 Route::put('roles/{roleId}/give-permissions', [App\Http\Controllers\RoleController::class, 'givePermissionToRole'])->name('roles.givePermissions');
 
- 
+});
 Route::resource('brands',BrandController::class);
 
 Route::get('/', function () {

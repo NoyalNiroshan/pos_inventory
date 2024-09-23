@@ -50,7 +50,7 @@ Route::get('stock-in/{stockIn}/invoice', [StockInController::class, 'generateInv
 use GuzzleHttp\Middleware;
 
 
-Route::group(['middleware'=>'auth'],function()
+Route::group(['middleware'=>['role:Master Admin|Admin']],function()
 {
 
 
@@ -61,13 +61,22 @@ Route::get('/products/{id}/units', function($id) {
 });
 
 Route::resource('permissions',PermissionController::class);
+Route::get('permissions/{permissionId}/delete',[App\Http\Controllers\PermissionController::class,'destroy']) ;
+
 Route::resource('roles',RoleController::class);
+Route::get('roles/{roleId}/delete',[App\Http\Controllers\RoleController::class,'destroy']) 
+->middleware('permission:delete role');
+
+
+
 Route::resource('users',UserController::class);
 
 Route::get('roles/{roleId}/give-permissions', [App\Http\Controllers\RoleController::class, 'addPermissionToRole'])->name('roles.addPermissions');
 Route::put('roles/{roleId}/give-permissions', [App\Http\Controllers\RoleController::class, 'givePermissionToRole'])->name('roles.givePermissions');
 
 });
+
+
 Route::resource('brands',BrandController::class);
 
 Route::middleware('guest')->group(function () {

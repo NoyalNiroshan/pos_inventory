@@ -16,7 +16,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4>Roles
-                        <a href="{{ url('roles/create') }}" class="btn btn-primary float-end">Add Permission</a>
+                        <a href="{{ url('roles/create') }}" class="btn btn-primary float-end">Add Role</a>
                     </h4>
                 </div>
                 <div class="card-body">
